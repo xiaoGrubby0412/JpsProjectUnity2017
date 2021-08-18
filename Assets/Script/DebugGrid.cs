@@ -153,62 +153,7 @@ public class DebugGrid : MonoBehaviour
             return new Color(255, 236, 139);
     }
 
-    void DrawArea()
-    {
-        foreach (KeyValuePair<int, AreaData> pair in AMapData.Instance.areaData)
-        {
-            GL.Begin(GL.LINES);
-            GL.Color(GetColorByAreaID(pair.Value.areaId));
-            int tempx = pair.Value.point.x;
-            int tempz = pair.Value.point.y;
 
-            if (tempx >= 0 && tempx + 1 < width && tempz >= 0 && tempz + 1 < height)
-            {
-                GL.Vertex3(tempx, offsetY + GetHei(tempx, tempz), tempz);
-                GL.Vertex3((tempx + 1), offsetY + GetHei(tempx + 1, tempz), tempz);
-
-                GL.Vertex3((tempx + 1), offsetY + GetHei(tempx + 1, tempz), tempz);
-                GL.Vertex3((tempx + 1), offsetY + GetHei(tempx + 1, tempz + 1), (tempz + 1));
-
-                GL.Vertex3((tempx + 1), offsetY + GetHei(tempx + 1, tempz + 1), (tempz + 1));
-                GL.Vertex3((tempx), offsetY + GetHei(tempx, tempz + 1), (tempz + 1));
-
-                GL.Vertex3((tempx), offsetY + GetHei(tempx, tempz + 1), (tempz + 1));
-                GL.Vertex3(tempx, offsetY + GetHei(tempx, tempz), tempz);
-            }
-
-            GL.End();
-        }
-    }
-
-    void DrawGate()
-    {
-        foreach (KeyValuePair<int, AGateData> pair in AMapData.Instance.gateData)
-        {
-            GL.Begin(GL.LINES);
-            GL.Color(Color.blue);
-            int tempx = pair.Value.point.x;
-            int tempz = pair.Value.point.y;
-
-            if (tempx >= 0 && tempx + 1 < width && tempz >= 0 && tempz + 1 < height)
-            {
-                GL.Vertex3(tempx, offsetY + GetHei(tempx, tempz), tempz);
-                GL.Vertex3((tempx + 1), offsetY + GetHei(tempx + 1, tempz), tempz);
-
-                GL.Vertex3((tempx + 1), offsetY + GetHei(tempx + 1, tempz), tempz);
-                GL.Vertex3((tempx + 1), offsetY + GetHei(tempx + 1, tempz + 1), (tempz + 1));
-
-                GL.Vertex3((tempx + 1), offsetY + GetHei(tempx + 1, tempz + 1), (tempz + 1));
-                GL.Vertex3((tempx), offsetY + GetHei(tempx, tempz + 1), (tempz + 1));
-
-                GL.Vertex3((tempx), offsetY + GetHei(tempx, tempz + 1), (tempz + 1));
-                GL.Vertex3(tempx, offsetY + GetHei(tempx, tempz), tempz);
-            }
-
-            GL.End();
-        }
-
-    }
 
     void DrawStartEnd()
     {
@@ -563,30 +508,30 @@ public class DebugGrid : MonoBehaviour
                 if (curBrushSetType == BrushSetType.None) return;
                 else if (curBrushSetType == BrushSetType.Block)
                 {
-                    AMapData.Instance.SetBlock(tempx, tempz);
-                    AMapData.Instance.SetBlock(tempx + 1, tempz);
-                    AMapData.Instance.SetBlock(tempx + 1, tempz + 1);
-                    AMapData.Instance.SetBlock(tempx, tempz + 1);
+                    Grid.Instance.SetBlock(tempx, tempz);
+                    Grid.Instance.SetBlock(tempx + 1, tempz);
+                    Grid.Instance.SetBlock(tempx + 1, tempz + 1);
+                    Grid.Instance.SetBlock(tempx, tempz + 1);
                     updateListHeight(tempx, tempx + 1);
                     updateListWidth(tempz, tempz + 1);
                 }
                 else if (curBrushSetType == BrushSetType.Gate)
                 {
-                    AMapData.Instance.SetGate(tempx, tempz);
+                    //AMapData.Instance.SetGate(tempx, tempz);
                 }
                 else if (curBrushSetType == BrushSetType.Rubber)
                 {
-                    AMapData.Instance.SetNormal(tempx, tempz);
-                    AMapData.Instance.SetNormal(tempx + 1, tempz);
-                    AMapData.Instance.SetNormal(tempx + 1, tempz + 1);
-                    AMapData.Instance.SetNormal(tempx, tempz + 1);
+                    Grid.Instance.SetNormal(tempx, tempz);
+                    Grid.Instance.SetNormal(tempx + 1, tempz);
+                    Grid.Instance.SetNormal(tempx + 1, tempz + 1);
+                    Grid.Instance.SetNormal(tempx, tempz + 1);
                 }
                 else if (curBrushSetType == BrushSetType.Area)
                 {
-                    AMapData.Instance.SetAreaData(curSelectAreaID, tempx, tempz);
-                    AMapData.Instance.SetAreaData(curSelectAreaID, tempx + 1, tempz);
-                    AMapData.Instance.SetAreaData(curSelectAreaID, tempx + 1, tempz + 1);
-                    AMapData.Instance.SetAreaData(curSelectAreaID, tempx, tempz + 1);
+                    //AMapData.Instance.SetAreaData(curSelectAreaID, tempx, tempz);
+                    //AMapData.Instance.SetAreaData(curSelectAreaID, tempx + 1, tempz);
+                    //AMapData.Instance.SetAreaData(curSelectAreaID, tempx + 1, tempz + 1);
+                    //AMapData.Instance.SetAreaData(curSelectAreaID, tempx, tempz + 1);
                 }
             }
         }
@@ -597,16 +542,12 @@ public class DebugGrid : MonoBehaviour
     //提取某个网格的颜色
     Color GetCellColor(int i, int j)
     {
-        //		int val =UGE.mapMgr.gridInfo.GetBlock(i,j);
-        AMapDataType val = AMapData.Instance.GetMapDataType(i, j);
-
-        switch (val)
+        ANode node = Grid.Instance.spots[i][j];
+        switch (node.Cost)
         {
-            case AMapDataType.Normal: return Color.white;
-            case AMapDataType.Block: return Color.red;
+            case 0: return Color.red;
+            default: return Color.white;
         }
-
-        return Color.white;
     }
 
     //提取某个网格的颜色
@@ -625,39 +566,11 @@ public class DebugGrid : MonoBehaviour
     }
 
     public List<int> items = null;
-    public List<List<AGraphV2>> gatePaths = null;
+
 
     public void SetItems(int[] items)
     {
         this.items = new List<int>(items);
-    }
-
-    void DrawGatePaths()
-    {
-        if (gatePaths == null || gatePaths.Count == 0) return;
-
-        GL.Begin(GL.LINES);
-        GL.Color(Color.yellow);
-
-        for (int i = 0; i < gatePaths.Count; i++)
-        {
-            List<AGraphV2> path = gatePaths[i];
-            for (int j = 0; j < path.Count - 1; j++)
-            {
-                Vector3 v;
-                v.x = path[j].x;
-                v.z = path[j].y;
-                v.y = 1;
-                GL.Vertex(v);
-
-                v.x = path[j + 1].x;
-                v.z = path[j + 1].y;
-                v.y = 1;
-                GL.Vertex(v);
-            }
-        }
-
-        GL.End();
     }
 
     void DrawPath()

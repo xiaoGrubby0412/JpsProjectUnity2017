@@ -40,33 +40,32 @@ namespace ACE
         public Dictionary<int, ANode> openDict;
         public PriorityQueue<ANode> sortedOpenQue;
         public List<ANode> neighbors;
-        public int G;
-        private AMapData aMapData;
+        private Grid grid;
         private bool ifNum = false;
 
-        public JpsHelperManager(AMapDataBase aMapData)
+        public JpsHelperManager(Grid grid)
         {
-            this.aMapData = aMapData as AMapData;
+            this.grid = grid;
             this.sortedOpenQue = new PriorityQueue<ANode>(65535, new ANodeCom());
             this.openDict = new Dictionary<int, ANode>();
             this.closeDict = new Dictionary<int, ANode>();
             this.neighbors = new List<ANode>();
         }
 
-        public void SetMapData(AMapDataBase aMapData)
+        public void SetMapData(Grid grid)
         {
-            this.aMapData = aMapData as AMapData;
+            this.grid = grid;
         }
 
-        public bool InitJps(int startX, int startY, int endX, int endY, int p_maxStep, bool ifNum) 
+        public bool InitJps(int startX, int startY, int endX, int endY, int p_maxStep, bool ifNum)
         {
-            if (this.aMapData.IsBlock(startX, startY))
+            if (this.grid.spots[startX][startY].Cost == 0)
             {
                 Debug.LogError("startX startY is Block !!! startX == " + startX + " startY == " + startY);
                 return false;
             }
 
-            if (this.aMapData.IsBlock(endX, endY))
+            if (this.grid.spots[endX][endY].Cost == 0)
             {
                 Debug.LogError("endX endY is Block !!! endX == " + endX + " endY == " + endY);
                 return false;
@@ -74,7 +73,7 @@ namespace ACE
 
             if (p_maxStep < 1)
             {
-                p_maxStep = this.aMapData.mapWidth * this.aMapData.mapHeight;
+                p_maxStep = this.grid.rows * this.grid.cols;
             }
 
             return Init(startX, startY, endX, endY, p_maxStep, ifNum);
@@ -119,8 +118,6 @@ namespace ACE
 
             int finalG = this.finalNode.G;
             int num = 0;
-            int numSlow = 0;
-            int numNormal = 0;
 
             while (cur != null)
             {
@@ -129,17 +126,12 @@ namespace ACE
                 pathList.Insert(2, cur.Y * 10);
 
                 num = num + 1;
-                if (cur.NodeType == AMapDataType.SlowDown)
-                    numSlow = numSlow + 1;
-                else if (cur.NodeType == AMapDataType.Normal)
-                    numNormal = numNormal + 1;
-                else
-                    Debug.LogError("Error!!!!!!!!!!!!!!!!!!!!!!!!!!!! type == " + cur.NodeType);
+
 
                 cur = cur.Parent;
             }
 
-            Debug.Log("final node.G == " + finalG + " all num == " + num + " numSlow == " + numSlow + " numNormal == " + numNormal);
+            Debug.Log("final node.G == " + finalG + " all num == " + num);
         }
 
 
@@ -183,7 +175,6 @@ namespace ACE
             startNode.G = 0;
             startNode.H = GetNodeH(startX, startY, endX, endY);
             startNode.F = startNode.H + startNode.G;
-            startNode.NodeType = this.aMapData.GetMapDataType(startX, startY);
             sortedOpenQue.Push(startNode);
 
             int key = ANode.Key(startX, startY);
@@ -216,9 +207,9 @@ namespace ACE
         }
 
 
-        public ANode jump(ANode _neighbor, ANode _current, AMapData _grid)
+        public ANode jump(ANode _neighbor, ANode _current, Grid _grid)
         {
-            if (_neighbor == null || this.aMapData.IsBlock(_neighbor))
+            if (_neighbor == null || _neighbor.Cost == 0)
             {
                 return null;
             }
@@ -281,7 +272,7 @@ namespace ACE
             var H_cell = _grid.getNeighbor(_neighbor, dx, 0);
             var V_cell = _grid.getNeighbor(_neighbor, 0, dy);
 
-            if ((H_cell != null && this.aMapData.IsBlock(H_cell) == false) || (V_cell != null && this.aMapData.IsBlock(V_cell) == false))
+            if ((H_cell != null && H_cell.Cost != 0) || (V_cell != null && V_cell.Cost != 0))
             {
                 var D_Cell = _grid.getNeighbor(_neighbor, dx, dy);
                 return jump(D_Cell, _neighbor, _grid);
@@ -294,8 +285,8 @@ namespace ACE
 
         public bool HasForceNeighbor(ANode forceNeighbor1, ANode obstacle1, ANode forceNeighbor2, ANode obstacle2)
         {
-            if ((obstacle1 != null && this.aMapData.IsBlock(obstacle1) && forceNeighbor1 != null && this.aMapData.IsBlock(forceNeighbor1) == false) ||
-                (obstacle2 != null && this.aMapData.IsBlock(obstacle2) && forceNeighbor2 != null && this.aMapData.IsBlock(forceNeighbor2) == false))
+            if ((obstacle1 != null && obstacle1.Cost == 0 && forceNeighbor1 != null && forceNeighbor1.Cost != 0) ||
+            (obstacle2 != null && obstacle2.Cost == 0 && forceNeighbor2 != null && forceNeighbor2.Cost != 0))
             {
                 return true;
             }
@@ -309,17 +300,17 @@ namespace ACE
             for (var i = 0; i < 8; i++)
             {
                 //var dir = grid.drections[i];
-                var neighbor = this.aMapData.getNeighbor(_spot, this.aMapData.drections[i, 0], this.aMapData.drections[i, 1]);
-                if (neighbor != null && this.aMapData.IsBlock(neighbor) == false)
+                var neighbor = this.grid.getNeighbor(_spot, this.grid.drections[i, 0], this.grid.drections[i, 1]);
+                if (neighbor != null && neighbor.Cost != 0)
                 {
                     if ((i % 2) != 0)
                     {//斜角度
                         int last_dir = (i - 1) % 8;
                         int next_dir = (i + 1) % 8;
                         //逆时针箭头转动 如果两个分量都是阻挡 无法通过 该点不加入
-                        var last = this.aMapData.getNeighbor(_spot, this.aMapData.drections[last_dir, 0], this.aMapData.drections[last_dir, 1]);
-                        var next = this.aMapData.getNeighbor(_spot, this.aMapData.drections[next_dir, 0], this.aMapData.drections[next_dir, 1]);
-                        if (last != null && this.aMapData.IsBlock(last) && next != null && this.aMapData.IsBlock(next))
+                        var last = this.grid.getNeighbor(_spot, this.grid.drections[last_dir, 0], this.grid.drections[last_dir, 1]);
+                        var next = this.grid.getNeighbor(_spot, this.grid.drections[next_dir, 0], this.grid.drections[next_dir, 1]);
+                        if (last != null && last.Cost == 0 && next != null && next.Cost == 0)
                         {
                             //console.log("对角");
                         }
@@ -341,17 +332,17 @@ namespace ACE
 
         //////////////////////////////////////////////////////////////////////////CutMask////////////////////////////////////////////////////////////////////////////
 
-        public void AddForceNeighbor(ANode _cell, AMapData _grid, List<ANode> list, int _dirx, int _diry)
+        public void AddForceNeighbor(ANode _cell, Grid _grid, List<ANode> list, int _dirx, int _diry)
         {
             ANode forceNeighbor = _grid.getNeighbor(_cell, _dirx, _diry);
-            if (forceNeighbor != null && this.aMapData.IsBlock(forceNeighbor) == false)
+            if (forceNeighbor != null && forceNeighbor.Cost != 0)
             {
                 list.Add(forceNeighbor);
             }
         }
 
 
-        public List<ANode> HorizontalTest(AMapData _grid, ANode _currentCell, int _dir)
+        public List<ANode> HorizontalTest(Grid _grid, ANode _currentCell, int _dir)
         {
             List<ANode> res = new List<ANode>();
             var nextCell = _grid.getNeighbor(_currentCell, _dir, 0);
@@ -361,7 +352,7 @@ namespace ACE
             }
             else
             {
-                if (this.aMapData.IsBlock(nextCell) == false)
+                if (nextCell.Cost != 0)
                 {
                     res.Add(nextCell);
                 }
@@ -394,7 +385,7 @@ namespace ACE
             }
             return res;
         }
-        public List<ANode> VerticalTest(AMapData _grid, ANode _currentCell, int _dir)
+        public List<ANode> VerticalTest(Grid _grid, ANode _currentCell, int _dir)
         {
             List<ANode> res = new List<ANode>();
             var nextCell = _grid.getNeighbor(_currentCell, 0, _dir);
@@ -404,7 +395,7 @@ namespace ACE
             }
             else
             {
-                if (this.aMapData.IsBlock(nextCell) == false)
+                if (nextCell.Cost != 0)
                 {
                     res.Add(nextCell);
                 }
@@ -437,7 +428,7 @@ namespace ACE
             }
             return res;
         }
-        public List<ANode> DiagonalTest(AMapData _grid, ANode _currentCell, int _dirx, int _diry)
+        public List<ANode> DiagonalTest(Grid _grid, ANode _currentCell, int _dirx, int _diry)
         {
             List<ANode> res = new List<ANode>();
             var nextCell = _grid.getNeighbor(_currentCell, _dirx, _diry);
@@ -446,22 +437,22 @@ namespace ACE
             var nextVCell = _grid.getNeighbor(_currentCell, 0, _diry);//垂直方向
             var nextHCell = _grid.getNeighbor(_currentCell, _dirx, 0);//水平方向
 
-            if (nextVCell != null && this.aMapData.IsBlock(nextVCell) == false)
+            if (nextVCell != null && nextVCell.Cost != 0)
             {
                 res.Add(nextVCell);
             }
-            if (nextHCell != null && this.aMapData.IsBlock(nextHCell) == false)
+            if (nextHCell != null && nextHCell.Cost != 0)
             {
                 res.Add(nextHCell);
             }
-            if (nextVCell != null && this.aMapData.IsBlock(nextVCell) && nextHCell != null && this.aMapData.IsBlock(nextHCell))
+            if (nextVCell != null && nextVCell.Cost == 0 && nextHCell != null && nextHCell.Cost == 0)
             {
                 //不允许穿过两个不可通行的节点之间
                 return res;
             }
             else
             {
-                if (nextCell != null && this.aMapData.IsBlock(nextCell) == false)
+                if (nextCell != null && nextCell.Cost != 0)
                 {
                     res.Add(nextCell);
                 }
@@ -495,14 +486,14 @@ namespace ACE
             return res;
         }
         //考虑斜角，不需从两个墙之间穿过
-        public void AddForceNeighbor_D(ANode _cell, AMapData _grid, List<ANode> list, int _close, int _open, int _add)
+        public void AddForceNeighbor_D(ANode _cell, Grid _grid, List<ANode> list, int _close, int _open, int _add)
         {
             var closeCell = _grid.getNeighbor_byDirID(_cell, _close);
             var openCell = _grid.getNeighbor_byDirID(_cell, _open);
             if (openCell == null)
                 return;
-            if (this.aMapData.IsBlock(closeCell) &&
-                this.aMapData.IsBlock(openCell) == false)
+            if (closeCell.Cost == 0 &&
+                openCell.Cost != 0)
             {
                 AddForceNeighbor(_cell, _grid, list, _grid.drections[_add, 0], _grid.drections[_add, 1]);
             }
@@ -517,18 +508,18 @@ namespace ACE
             if (_dirx != 0 && _diry != 0)
             {
                 //斜角
-                neighbors = DiagonalTest(this.aMapData, _spot, _dirx, _diry);
+                neighbors = DiagonalTest(this.grid, _spot, _dirx, _diry);
             }
             else
             {
                 //非斜角
                 if (_dirx != 0)
                 {
-                    neighbors = HorizontalTest(this.aMapData, _spot, _dirx);
+                    neighbors = HorizontalTest(this.grid, _spot, _dirx);
                 }
                 else
                 {
-                    neighbors = VerticalTest(this.aMapData, _spot, _diry);
+                    neighbors = VerticalTest(this.grid, _spot, _diry);
                 }
             }
 
@@ -574,7 +565,7 @@ namespace ACE
             {
                 var neighbor = neighbors[i];
 
-                var jumpNode = jump(neighbor, minFNode, this.aMapData);
+                var jumpNode = jump(neighbor, minFNode, this.grid);
                 if (jumpNode != null && !closeDict.ContainsKey(jumpNode.GetKey()))
                 {
                     var g_score = minFNode.G + GetNodeG(jumpNode.X, jumpNode.Y, minFNode.X, minFNode.Y);

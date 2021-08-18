@@ -13,10 +13,10 @@ namespace ACE
         public int G;
         public int H;
         public int F;
+        public int Cost;
 
         public ANode Parent;
         public ANode Next;
-        public AMapDataType NodeType;
 
         public ANode()
         {
@@ -27,6 +27,13 @@ namespace ACE
         {
             this.X = x;
             this.Y = y;
+        }
+
+        public ANode(int x, int y, int cost)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Cost = cost;
         }
 
         public void Reset()
