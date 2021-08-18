@@ -41,7 +41,7 @@ public class DemoControl : MonoBehaviour
         Grid.Instance.SetGridSize(DemoControl.mapWidth, DemoControl.mapHeight);
         DebugGrid.Instance.width = DemoControl.mapWidth;
         DebugGrid.Instance.height = DemoControl.mapHeight;
-        //DebugGrid.Instance.blockData = AMapData.Instance.blockData;
+        DebugGrid.Instance.blockData = Grid.Instance.spots;
         DebugGrid.Instance.lstWidth = new List<Vector2>[DemoControl.mapWidth];
         DebugGrid.Instance.lstHeight = new List<Vector2>[DemoControl.mapHeight];
         DebugGrid.Instance.updateListHeight(0, DemoControl.mapWidth - 1);

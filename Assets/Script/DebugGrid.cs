@@ -48,7 +48,7 @@ public class DebugGrid : MonoBehaviour
     public bool ifStartSaveData = false;
     public int curSelectAreaID = 0;
 
-    public int[][] blockData;
+    public ANode[][] blockData;
 
     public List<Vector2>[] lstWidth;
     public List<Vector2>[] lstHeight;
@@ -104,17 +104,15 @@ public class DebugGrid : MonoBehaviour
     void OnRenderObject()
     {
         DrawBlock();
-        //DrawQuad(m_x, m_z, brushSize, Color.green);
-        //DrawArea();
-        //DrawGate();
-        if (curBrushType != BrushType.None)
-        {
-            DrawSelect();
-        }
 
-        DrawStartEnd();
-        DrawOpenSet();
-        DrawCloseSet();
+        //if (curBrushType != BrushType.None)
+        //{
+        //    DrawSelect();
+        //}
+
+        //DrawStartEnd();
+        //DrawOpenSet();
+        //DrawCloseSet();
     }
 
     //数组地面的数据标志
@@ -259,7 +257,7 @@ public class DebugGrid : MonoBehaviour
             int lastX = -1;
             for (int x = 0; x < this.width; x++)
             {
-                if (lastX == -1 && this.blockData[x][y] == 1)
+                if (lastX == -1 && this.blockData[x][y].cost == 0)
                 {
                     lastX = x;
                     list.Add(new Vector2(x, y));
@@ -284,7 +282,7 @@ public class DebugGrid : MonoBehaviour
             int lastY = -1;
             for (int y = 0; y < this.height; y++)
             {
-                if (lastY == -1 && this.blockData[x][y] == 1)
+                if (lastY == -1 && this.blockData[x][y].cost == 0)
                 {
                     lastY = y;
                     list.Add(new Vector2(x, y));
@@ -543,7 +541,7 @@ public class DebugGrid : MonoBehaviour
     Color GetCellColor(int i, int j)
     {
         ANode node = Grid.Instance.spots[i][j];
-        switch (node.Cost)
+        switch (node.cost)
         {
             case 0: return Color.red;
             default: return Color.white;

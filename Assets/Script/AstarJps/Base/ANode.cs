@@ -13,7 +13,7 @@ namespace ACE
         public int G;
         public int H;
         public int F;
-        public int Cost;
+        public int cost;
 
         public ANode Parent;
         public ANode Next;
@@ -33,7 +33,7 @@ namespace ACE
         {
             this.X = x;
             this.Y = y;
-            this.Cost = cost;
+            this.cost = cost;
         }
 
         public void Reset()

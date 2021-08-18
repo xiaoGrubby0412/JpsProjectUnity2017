@@ -70,12 +70,12 @@ namespace ACE
 
         public void SetBlock(int x, int y)
         {
-            this.spots[x][y].Cost = 0;
+            this.spots[x][y].cost = 0;
         }
 
         public void SetNormal(int x, int y)
         {
-            this.spots[x][y].Cost = 1;
+            this.spots[x][y].cost = 1;
         }
     }
 }

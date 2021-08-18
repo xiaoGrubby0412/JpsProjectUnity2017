@@ -59,13 +59,13 @@ namespace ACE
 
         public bool InitJps(int startX, int startY, int endX, int endY, int p_maxStep, bool ifNum)
         {
-            if (this.grid.spots[startX][startY].Cost == 0)
+            if (this.grid.spots[startX][startY].cost == 0)
             {
                 Debug.LogError("startX startY is Block !!! startX == " + startX + " startY == " + startY);
                 return false;
             }
 
-            if (this.grid.spots[endX][endY].Cost == 0)
+            if (this.grid.spots[endX][endY].cost == 0)
             {
                 Debug.LogError("endX endY is Block !!! endX == " + endX + " endY == " + endY);
                 return false;
@@ -209,7 +209,7 @@ namespace ACE
 
         public ANode jump(ANode _neighbor, ANode _current, Grid _grid)
         {
-            if (_neighbor == null || _neighbor.Cost == 0)
+            if (_neighbor == null || _neighbor.cost == 0)
             {
                 return null;
             }
@@ -272,7 +272,7 @@ namespace ACE
             var H_cell = _grid.getNeighbor(_neighbor, dx, 0);
             var V_cell = _grid.getNeighbor(_neighbor, 0, dy);
 
-            if ((H_cell != null && H_cell.Cost != 0) || (V_cell != null && V_cell.Cost != 0))
+            if ((H_cell != null && H_cell.cost != 0) || (V_cell != null && V_cell.cost != 0))
             {
                 var D_Cell = _grid.getNeighbor(_neighbor, dx, dy);
                 return jump(D_Cell, _neighbor, _grid);
@@ -285,8 +285,8 @@ namespace ACE
 
         public bool HasForceNeighbor(ANode forceNeighbor1, ANode obstacle1, ANode forceNeighbor2, ANode obstacle2)
         {
-            if ((obstacle1 != null && obstacle1.Cost == 0 && forceNeighbor1 != null && forceNeighbor1.Cost != 0) ||
-            (obstacle2 != null && obstacle2.Cost == 0 && forceNeighbor2 != null && forceNeighbor2.Cost != 0))
+            if ((obstacle1 != null && obstacle1.cost == 0 && forceNeighbor1 != null && forceNeighbor1.cost != 0) ||
+            (obstacle2 != null && obstacle2.cost == 0 && forceNeighbor2 != null && forceNeighbor2.cost != 0))
             {
                 return true;
             }
@@ -301,7 +301,7 @@ namespace ACE
             {
                 //var dir = grid.drections[i];
                 var neighbor = this.grid.getNeighbor(_spot, this.grid.drections[i, 0], this.grid.drections[i, 1]);
-                if (neighbor != null && neighbor.Cost != 0)
+                if (neighbor != null && neighbor.cost != 0)
                 {
                     if ((i % 2) != 0)
                     {//斜角度
@@ -310,7 +310,7 @@ namespace ACE
                         //逆时针箭头转动 如果两个分量都是阻挡 无法通过 该点不加入
                         var last = this.grid.getNeighbor(_spot, this.grid.drections[last_dir, 0], this.grid.drections[last_dir, 1]);
                         var next = this.grid.getNeighbor(_spot, this.grid.drections[next_dir, 0], this.grid.drections[next_dir, 1]);
-                        if (last != null && last.Cost == 0 && next != null && next.Cost == 0)
+                        if (last != null && last.cost == 0 && next != null && next.cost == 0)
                         {
                             //console.log("对角");
                         }
@@ -335,7 +335,7 @@ namespace ACE
         public void AddForceNeighbor(ANode _cell, Grid _grid, List<ANode> list, int _dirx, int _diry)
         {
             ANode forceNeighbor = _grid.getNeighbor(_cell, _dirx, _diry);
-            if (forceNeighbor != null && forceNeighbor.Cost != 0)
+            if (forceNeighbor != null && forceNeighbor.cost != 0)
             {
                 list.Add(forceNeighbor);
             }
@@ -352,7 +352,7 @@ namespace ACE
             }
             else
             {
-                if (nextCell.Cost != 0)
+                if (nextCell.cost != 0)
                 {
                     res.Add(nextCell);
                 }
@@ -395,7 +395,7 @@ namespace ACE
             }
             else
             {
-                if (nextCell.Cost != 0)
+                if (nextCell.cost != 0)
                 {
                     res.Add(nextCell);
                 }
@@ -437,22 +437,22 @@ namespace ACE
             var nextVCell = _grid.getNeighbor(_currentCell, 0, _diry);//垂直方向
             var nextHCell = _grid.getNeighbor(_currentCell, _dirx, 0);//水平方向
 
-            if (nextVCell != null && nextVCell.Cost != 0)
+            if (nextVCell != null && nextVCell.cost != 0)
             {
                 res.Add(nextVCell);
             }
-            if (nextHCell != null && nextHCell.Cost != 0)
+            if (nextHCell != null && nextHCell.cost != 0)
             {
                 res.Add(nextHCell);
             }
-            if (nextVCell != null && nextVCell.Cost == 0 && nextHCell != null && nextHCell.Cost == 0)
+            if (nextVCell != null && nextVCell.cost == 0 && nextHCell != null && nextHCell.cost == 0)
             {
                 //不允许穿过两个不可通行的节点之间
                 return res;
             }
             else
             {
-                if (nextCell != null && nextCell.Cost != 0)
+                if (nextCell != null && nextCell.cost != 0)
                 {
                     res.Add(nextCell);
                 }
@@ -492,8 +492,8 @@ namespace ACE
             var openCell = _grid.getNeighbor_byDirID(_cell, _open);
             if (openCell == null)
                 return;
-            if (closeCell.Cost == 0 &&
-                openCell.Cost != 0)
+            if (closeCell.cost == 0 &&
+                openCell.cost != 0)
             {
                 AddForceNeighbor(_cell, _grid, list, _grid.drections[_add, 0], _grid.drections[_add, 1]);
             }
