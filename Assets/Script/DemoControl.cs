@@ -92,8 +92,8 @@ public class DemoControl : MonoBehaviour
         }
     }
 
-    public string spos = "26,1372";
-    public string tpos = "1387,16";
+    public string spos = "1,1";
+    public string tpos = "1399,1399";
     bool setSpos;
     bool setTpos;
 

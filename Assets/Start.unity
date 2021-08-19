@@ -229,8 +229,8 @@ MonoBehaviour:
   NUM_PER_SESS: 20
   ifInverse: 0
   debugGrid: {fileID: 540916299}
-  spos: 26,1372
-  tpos: 1387,16
+  spos: 1,1
+  tpos: 1399,1399
 --- !u!1 &540916297
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,6 +23,7 @@ namespace ACE
                 for (int j = 0; j < this.rows; j++)
                 {
                     this.spots[i][j] = new ANode(i, j);
+                    this.spots[i][j].cost = 1;
                 }
             }
         }

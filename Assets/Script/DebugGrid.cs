@@ -105,14 +105,14 @@ public class DebugGrid : MonoBehaviour
     {
         DrawBlock();
 
-        //if (curBrushType != BrushType.None)
-        //{
-        //    DrawSelect();
-        //}
+        if (curBrushType != BrushType.None)
+        {
+            DrawSelect();
+        }
 
-        //DrawStartEnd();
-        //DrawOpenSet();
-        //DrawCloseSet();
+        DrawStartEnd();
+        DrawOpenSet();
+        DrawCloseSet();
     }
 
     //数组地面的数据标志
@@ -263,7 +263,7 @@ public class DebugGrid : MonoBehaviour
                     list.Add(new Vector2(x, y));
                 }
 
-                if (lastX != -1 && ((this.blockData[x][y] != this.blockData[lastX][y]) || x == this.width - 1))
+                if (lastX != -1 && ((this.blockData[x][y].cost != this.blockData[lastX][y].cost) || x == this.width - 1))
                 {
                     list.Add(new Vector2(x - 1, y));
                     lastX = -1;
@@ -288,7 +288,7 @@ public class DebugGrid : MonoBehaviour
                     list.Add(new Vector2(x, y));
                 }
 
-                if (lastY != -1 && ((this.blockData[x][y] != this.blockData[x][lastY]) || y == this.height - 1))
+                if (lastY != -1 && ((this.blockData[x][y].cost != this.blockData[x][lastY].cost) || y == this.height - 1))
                 {
                     list.Add(new Vector2(x, y - 1));
                     lastY = -1;
