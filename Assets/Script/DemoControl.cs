@@ -291,68 +291,68 @@ public class DemoControl : MonoBehaviour
         }
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("设置区域 1"))
-        {
-            debugGrid.curSelectAreaID = 0;
-            debugGrid.curBrushSetType = BrushSetType.Area;
-            debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Button("设置区域 1"))
+        //{
+        //    debugGrid.curSelectAreaID = 0;
+        //    debugGrid.curBrushSetType = BrushSetType.Area;
+        //    debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
+        //}
+        //GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("设置区域 2"))
-        {
-            debugGrid.curSelectAreaID = 1;
-            debugGrid.curBrushSetType = BrushSetType.Area;
-            debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Button("设置区域 2"))
+        //{
+        //    debugGrid.curSelectAreaID = 1;
+        //    debugGrid.curBrushSetType = BrushSetType.Area;
+        //    debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
+        //}
+        //GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("设置区域 3"))
-        {
-            debugGrid.curSelectAreaID = 2;
-            debugGrid.curBrushSetType = BrushSetType.Area;
-            debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Button("设置区域 3"))
+        //{
+        //    debugGrid.curSelectAreaID = 2;
+        //    debugGrid.curBrushSetType = BrushSetType.Area;
+        //    debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
+        //}
+        //GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("设置区域 4"))
-        {
-            debugGrid.curSelectAreaID = 3;
-            debugGrid.curBrushSetType = BrushSetType.Area;
-            debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Button("设置区域 4"))
+        //{
+        //    debugGrid.curSelectAreaID = 3;
+        //    debugGrid.curBrushSetType = BrushSetType.Area;
+        //    debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
+        //}
+        //GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("设置区域 5"))
-        {
-            debugGrid.curSelectAreaID = 4;
-            debugGrid.curBrushSetType = BrushSetType.Area;
-            debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Button("设置区域 5"))
+        //{
+        //    debugGrid.curSelectAreaID = 4;
+        //    debugGrid.curBrushSetType = BrushSetType.Area;
+        //    debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
+        //}
+        //GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("设置区域 6"))
-        {
-            debugGrid.curSelectAreaID = 5;
-            debugGrid.curBrushSetType = BrushSetType.Area;
-            debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Button("设置区域 6"))
+        //{
+        //    debugGrid.curSelectAreaID = 5;
+        //    debugGrid.curBrushSetType = BrushSetType.Area;
+        //    debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
+        //}
+        //GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("设置区域 7"))
-        {
-            debugGrid.curSelectAreaID = 6;
-            debugGrid.curBrushSetType = BrushSetType.Area;
-            debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Button("设置区域 7"))
+        //{
+        //    debugGrid.curSelectAreaID = 6;
+        //    debugGrid.curBrushSetType = BrushSetType.Area;
+        //    debugGrid.curBrushType = lastBrushSetType == BrushType.None ? BrushType.Rect : BrushType.Circle;
+        //}
+        //GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("initJps"))

@@ -148,25 +148,25 @@ namespace ACE
             this.pathListV2 = null;
             this.ifNum = ifNum;
 
-            //初始化open表
-            for (int i = 0; i < sortedOpenQue.Count; i++)
-            {
-                FreeANodePool.Instance.PushFreeNodeToPool(sortedOpenQue.heap[i]);
-            }
+            ////初始化open表
+            //for (int i = 0; i < sortedOpenQue.Count; i++)
+            //{
+            //    FreeANodePool.Instance.PushFreeNodeToPool(sortedOpenQue.heap[i]);
+            //}
 
             sortedOpenQue.Clear();
             openDict.Clear();
 
 
-            //初始化close表
-            foreach (var n in closeDict.Values)
-            {
-                FreeANodePool.Instance.PushFreeNodeToPool(n);
-            }
+            ////初始化close表
+            //foreach (var n in closeDict.Values)
+            //{
+            //    FreeANodePool.Instance.PushFreeNodeToPool(n);
+            //}
 
             closeDict.Clear();
 
-            ANode startNode = FreeANodePool.Instance.GetFreeNode();
+            ANode startNode = this.grid.spots[startX][startY];
             startNode.Reset();
             startNode.X = startX;
             startNode.Y = startY;
@@ -556,7 +556,6 @@ namespace ACE
             }
             else
             {
-                Debug.Log("888888888888888888888888888888888888888888888888888888888");
                 GetNeighbors(minFNode);
             }
 
