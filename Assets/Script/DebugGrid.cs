@@ -523,6 +523,8 @@ public class DebugGrid : MonoBehaviour
                     Grid.Instance.SetNormal(tempx + 1, tempz);
                     Grid.Instance.SetNormal(tempx + 1, tempz + 1);
                     Grid.Instance.SetNormal(tempx, tempz + 1);
+                    updateListHeight(tempx, tempx + 1);
+                    updateListWidth(tempz, tempz + 1);
                 }
                 else if (curBrushSetType == BrushSetType.Area)
                 {
